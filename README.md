@@ -12,7 +12,7 @@ Each workflow step gets a fresh, ephemeral sandbox — no shared state, no conta
 steps:
   - uses: actions/checkout@v4
 
-  - uses: sandflare/run-action@v1
+  - uses: pandastack-io/run-action@v1
     with:
       api_key: ${{ secrets.SANDFLARE_API_KEY }}
       run: python eval_agent.py
@@ -21,7 +21,7 @@ steps:
 ### With template and VM size
 
 ```yaml
-  - uses: sandflare/run-action@v1
+  - uses: pandastack-io/run-action@v1
     with:
       api_key: ${{ secrets.SANDFLARE_API_KEY }}
       template: code-interpreter
@@ -32,7 +32,7 @@ steps:
 ### Upload files, then run
 
 ```yaml
-  - uses: sandflare/run-action@v1
+  - uses: pandastack-io/run-action@v1
     with:
       api_key: ${{ secrets.SANDFLARE_API_KEY }}
       upload_path: ./tests
@@ -43,7 +43,7 @@ steps:
 ### Keep sandbox alive for debugging
 
 ```yaml
-  - uses: sandflare/run-action@v1
+  - uses: pandastack-io/run-action@v1
     with:
       api_key: ${{ secrets.SANDFLARE_API_KEY }}
       run: python debug_script.py
@@ -90,4 +90,3 @@ steps:
 
 - [https://sandflare.io](https://sandflare.io)
 - [https://docs.sandflare.io](https://docs.sandflare.io)
-  
