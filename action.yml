@@ -1,0 +1,72 @@
+name: 'Sandflare Sandbox Run'
+description: 'Run commands or scripts in an isolated Sandflare Firecracker microVM sandbox'
+author: 'Sandflare'
+
+branding:
+  icon: 'box'
+  color: 'orange'
+
+inputs:
+  api_key:
+    description: 'Sandflare API key (use secrets.SANDFLARE_API_KEY)'
+    required: true
+  run:
+    description: 'Shell command or script to execute inside the sandbox'
+    required: false
+    default: ''
+  template:
+    description: 'Sandbox template ID (default: base Ubuntu)'
+    required: false
+    default: ''
+  size:
+    description: 'VM size: nano, small, medium, large, xl'
+    required: false
+    default: 'small'
+  timeout:
+    description: 'Execution timeout in seconds'
+    required: false
+    default: '300'
+  working_directory:
+    description: 'Working directory inside sandbox'
+    required: false
+    default: '/home/user'
+  upload_path:
+    description: 'Local path to upload into sandbox before running'
+    required: false
+    default: ''
+  upload_remote_path:
+    description: 'Remote path for uploaded files'
+    required: false
+    default: '/home/user/workspace'
+  keep_sandbox:
+    description: 'Keep sandbox alive after run (for debugging)'
+    required: false
+    default: 'false'
+
+outputs:
+  sandbox_id:
+    description: 'The sandbox ID'
+  exit_code:
+    description: 'Exit code of the executed command'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install Sandflare CLI
+      shell: bash
+      run: pip install sandflare --quiet
+
+    - name: Run in Sandflare Sandbox
+      id: run
+      shell: bash
+      env:
+        SANDFLARE_API_KEY: ${{ inputs.api_key }}
+        SF_RUN: ${{ inputs.run }}
+        SF_TEMPLATE: ${{ inputs.template }}
+        SF_SIZE: ${{ inputs.size }}
+        SF_TIMEOUT: ${{ inputs.timeout }}
+        SF_WORKDIR: ${{ inputs.working_directory }}
+        SF_UPLOAD_PATH: ${{ inputs.upload_path }}
+        SF_UPLOAD_REMOTE: ${{ inputs.upload_remote_path }}
+        SF_KEEP: ${{ inputs.keep_sandbox }}
+      run: ${{ github.action_path }}/entrypoint.sh
